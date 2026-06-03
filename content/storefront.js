@@ -14,14 +14,29 @@
   const PARAM_KEYS = ["preview_theme_id", "key", "_ab", "_fd", "_sc", "pb"];
   const ctxKey = (domain, themeId) => `ctx:${domain}:${themeId}`;
 
-  function readLiveParams() {
-    const u = new URL(location.href);
+  function extractParams(urlStr) {
+    let u;
+    try {
+      u = new URL(urlStr);
+    } catch (_) {
+      return null;
+    }
     if (!u.searchParams.has("preview_theme_id")) return null;
     const params = {};
     for (const k of PARAM_KEYS) {
       if (u.searchParams.has(k)) params[k] = u.searchParams.get(k);
     }
     return params;
+  }
+
+  function readLiveParams() {
+    return extractParams(location.href);
+  }
+
+  // If Shopify stripped the param from this page but we arrived from a preview URL,
+  // recover it from the referrer (same store, so we keep the current host).
+  function readReferrerParams() {
+    return document.referrer ? extractParams(document.referrer) : null;
   }
 
   async function persist(params) {
@@ -50,7 +65,7 @@
   }
 
   async function activeParams() {
-    const live = readLiveParams();
+    const live = readLiveParams() || readReferrerParams();
     if (live) {
       await persist(live);
       return live;
@@ -109,11 +124,20 @@
     document.documentElement.appendChild(btn);
   }
 
+  function whenReady(fn) {
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", fn, { once: true });
+    } else {
+      fn();
+    }
+  }
+
   async function init() {
-    const live = readLiveParams();
+    // Capture as early as possible (runs at document_start) before Shopify can strip params.
+    const live = readLiveParams() || readReferrerParams();
     if (live) await persist(live);
     const params = await activeParams();
-    if (params) injectButton();
+    if (params) whenReady(injectButton);
   }
 
   init();

@@ -56,4 +56,28 @@
     },
     true
   );
+
+  // "Preview" (eye) opens the storefront in a new tab — often via window.open.
+  // Capture that URL the instant it's opened (matches "capture at the moment of click").
+  if (typeof window.open === "function") {
+    const origOpen = window.open;
+    window.open = function (url) {
+      try {
+        if (typeof url === "string") grab(url);
+      } catch (_) {}
+      return origOpen.apply(window, arguments);
+    };
+  }
+
+  // Fallback: catch clicks on anchors whose href is a preview URL.
+  document.addEventListener(
+    "click",
+    (e) => {
+      try {
+        const a = e.target && e.target.closest && e.target.closest("a[href]");
+        if (a) grab(a.href);
+      } catch (_) {}
+    },
+    true
+  );
 })();

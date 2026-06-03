@@ -22,7 +22,7 @@
       "matches": ["https://*.myshopify.com/*"],
       "js": ["lib/urlbuilder.js", "content/storefront.js"],
       "css": ["assets/floating-button.css"],
-      "run_at": "document_idle"
+      "run_at": "document_start"
     },
     {
       "matches": ["https://admin.shopify.com/store/*"],
