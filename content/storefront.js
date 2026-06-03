@@ -137,6 +137,13 @@
     const live = readLiveParams() || readReferrerParams();
     if (live) await persist(live);
     const params = await activeParams();
+    console.debug(
+      "[Proxel] storefront",
+      location.href,
+      "| live:", !!readLiveParams(),
+      "| referrer:", !!readReferrerParams(),
+      "| active:", params
+    );
     if (params) whenReady(injectButton);
   }
 

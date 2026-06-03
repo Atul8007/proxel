@@ -10,18 +10,21 @@
   const PARAM_KEYS = ["preview_theme_id", "key", "_ab", "_fd", "_sc", "pb"];
 
   window.addEventListener("message", async (e) => {
-    if (e.origin !== "https://admin.shopify.com" || e.source !== window) return;
+    if (e.origin !== location.origin || e.source !== window) return;
     const d = e.data;
     if (!d || d.__proxel !== true || d.kind !== "share" || typeof d.url !== "string") return;
 
     let u;
     try {
-      u = new URL(d.url);
+      u = new URL(d.url, location.href);
     } catch (_) {
       return;
     }
+    // Only accept storefront preview URLs (not relative admin links).
+    if (!/\.myshopify\.com$/i.test(u.host)) return;
     const themeId = u.searchParams.get("preview_theme_id");
     if (!themeId) return;
+    console.debug("[Proxel] captured preview context", u.host, themeId, Object.keys(Object.fromEntries(u.searchParams)));
 
     const params = {};
     for (const k of PARAM_KEYS) {

@@ -20,20 +20,24 @@
   "content_scripts": [
     {
       "matches": ["https://*.myshopify.com/*"],
+      "exclude_matches": ["https://*.myshopify.com/admin*"],
       "js": ["lib/urlbuilder.js", "content/storefront.js"],
       "css": ["assets/floating-button.css"],
-      "run_at": "document_start"
+      "run_at": "document_start",
+      "all_frames": true
     },
     {
-      "matches": ["https://admin.shopify.com/store/*"],
+      "matches": ["https://admin.shopify.com/store/*", "https://*.myshopify.com/admin*"],
       "js": ["content/admin-capture-main.js"],
       "run_at": "document_start",
-      "world": "MAIN"
+      "world": "MAIN",
+      "all_frames": true
     },
     {
-      "matches": ["https://admin.shopify.com/store/*"],
+      "matches": ["https://admin.shopify.com/store/*", "https://*.myshopify.com/admin*"],
       "js": ["content/admin-bridge.js"],
-      "run_at": "document_start"
+      "run_at": "document_start",
+      "all_frames": true
     }
   ]
 }
