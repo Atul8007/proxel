@@ -1,0 +1,10 @@
+{
+  "name": "proxel",
+  "version": "1.0.0",
+  "description": "Chrome extension: capture a Shopify theme preview and copy a direct, shareable link to the current page within that preview.",
+  "private": true,
+  "scripts": {
+    "test": "node tests/urlbuilder.test.js"
+  },
+  "license": "MIT"
+}

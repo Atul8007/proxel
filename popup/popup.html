@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="popup.css" />
+    <title>Proxel</title>
+  </head>
+  <body>
+    <header>
+      <h1>Proxel</h1>
+      <span class="sub">Theme preview deep links</span>
+    </header>
+
+    <section id="current" class="card"></section>
+
+    <section class="block">
+      <div class="lbl">Captured previews</div>
+      <div id="list"></div>
+    </section>
+
+    <footer>
+      <button id="clear" class="ghost">Clear all</button>
+      <span id="status"></span>
+    </footer>
+
+    <script src="../lib/urlbuilder.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>

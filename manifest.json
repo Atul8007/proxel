@@ -1,0 +1,39 @@
+{
+  "manifest_version": 3,
+  "name": "Proxel",
+  "version": "1.0.0",
+  "description": "Capture a Shopify theme preview and copy a direct, shareable link to the current page within that preview.",
+  "permissions": ["storage"],
+  "host_permissions": [
+    "https://admin.shopify.com/*",
+    "https://*.myshopify.com/*"
+  ],
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "Proxel"
+  },
+  "icons": {
+    "16": "icons/16.png",
+    "48": "icons/48.png",
+    "128": "icons/128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://*.myshopify.com/*"],
+      "js": ["lib/urlbuilder.js", "content/storefront.js"],
+      "css": ["assets/floating-button.css"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://admin.shopify.com/store/*"],
+      "js": ["content/admin-capture-main.js"],
+      "run_at": "document_start",
+      "world": "MAIN"
+    },
+    {
+      "matches": ["https://admin.shopify.com/store/*"],
+      "js": ["content/admin-bridge.js"],
+      "run_at": "document_start"
+    }
+  ]
+}
